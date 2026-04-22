@@ -1,0 +1,20 @@
+auth - global
+Feature 	                       Admin 	Manager 	Member
+View restaurants & menu items 	    ✅ 	    ✅ 	      ✅
+Create an order (add food items) 	✅ 	    ✅ 	      ✅
+Checkout & pay 	                    ✅ 	    ✅ 	      ❌
+Cancel an order 	                ✅ 	    ✅ 	      ❌
+Add / Modify payment methods 	    ✅ 	    ❌ 	      ❌
+
+User
+    -role
+    -name
+    -password
+
+Entities - 
+-Restraunt
+    - menu 
+        - items
+    -Payment Methods
+-Cart
+-Order
