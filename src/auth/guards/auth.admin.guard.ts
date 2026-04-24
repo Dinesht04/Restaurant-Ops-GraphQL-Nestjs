@@ -1,34 +1,36 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
-import { Observable } from "rxjs";
-import { extractTokenFromHeader } from "./auth.guard";
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { Observable } from 'rxjs';
+import { extractTokenFromHeader } from './auth.guard';
 
 @Injectable()
-export class ManagerGuard implements CanActivate{
-    constructor(private readonly jwtService:JwtService ){}
+export class ManagerGuard implements CanActivate {
+  constructor(private readonly jwtService: JwtService) {}
 
-    async canActivate(context: ExecutionContext): Promise<boolean> {
-        const req = context.switchToHttp().getRequest();
-        
-        const token = extractTokenFromHeader(req)
-        if(!token){
-            throw new UnauthorizedException();
-        }  
-        try {
-            const payload = await this.jwtService.verifyAsync(token);
-            console.log(payload)
-            if (payload["role"] !== "admin"){
-                throw new UnauthorizedException();
-            } else{
-                req['user'] = payload;
-            }
-            
-        } catch {
-            throw new UnauthorizedException();
-        }
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const req = context.switchToHttp().getRequest();
 
-        return true
+    const token = extractTokenFromHeader(req);
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+    try {
+      const payload = await this.jwtService.verifyAsync(token);
+      console.log(payload);
+      if (payload['role'] !== 'admin') {
+        throw new UnauthorizedException();
+      } else {
+        req['user'] = payload;
+      }
+    } catch {
+      throw new UnauthorizedException();
     }
 
-    
+    return true;
+  }
 }

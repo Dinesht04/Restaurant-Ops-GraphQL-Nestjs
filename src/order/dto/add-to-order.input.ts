@@ -1,10 +1,10 @@
-import { Field, InputType } from "@nestjs/graphql";
+import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
-export class addToOrder{
-    @Field()
-    orderId: number;
+export class addToOrder {
+  @Field()
+  orderId: number;
 
-    @Field()
-    itemId: number;
+  @Field()
+  itemId: number;
 }

@@ -7,6 +7,6 @@ import { RestaurantsResolver } from './restaurants.resolver';
 @Module({
   imports: [OrderService],
   providers: [RestaurantsService, RestaurantsResolver],
-  controllers: [RestaurantsController]
+  controllers: [RestaurantsController],
 })
 export class RestaurantsModule {}

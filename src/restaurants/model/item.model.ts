@@ -1,13 +1,13 @@
-import { Field, ID, ObjectType } from "@nestjs/graphql"
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class Item{
-    @Field(()=>ID)
-    id: number
+export class Item {
+  @Field(() => ID)
+  id: number;
 
-    @Field()
-    name: string
+  @Field()
+  name: string;
 
-    @Field()
-    price: string
+  @Field()
+  price: string;
 }

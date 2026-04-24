@@ -1,14 +1,12 @@
-import { Field, InputType } from "@nestjs/graphql";
-import { Item } from "../../restaurants/model/item.model";
-import { PaymentMethod } from "../../restaurants/model/order.model";
-
+import { Field, InputType } from '@nestjs/graphql';
+import { Item } from '../../restaurants/model/item.model';
+import { PaymentMethod } from '../../restaurants/model/order.model';
 
 @InputType()
-export class createOrderInput{
-    @Field()
-    restaurantId: number
+export class createOrderInput {
+  @Field()
+  restaurantId: number;
 
-    @Field(type => PaymentMethod)
-    paymentMethod: PaymentMethod
-
+  @Field((type) => PaymentMethod)
+  paymentMethod: PaymentMethod;
 }

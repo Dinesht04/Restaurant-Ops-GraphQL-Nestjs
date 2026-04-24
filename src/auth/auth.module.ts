@@ -7,14 +7,15 @@ import { jwtConstants } from './constants';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Module({
-  imports:[UsersModule,
+  imports: [
+    UsersModule,
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
-      signOptions: {expiresIn:'120s'}
-    })
+      signOptions: { expiresIn: '120s' },
+    }),
   ],
   controllers: [AuthController],
-  providers: [AuthService,PrismaService]
+  providers: [AuthService, PrismaService],
 })
 export class AuthModule {}

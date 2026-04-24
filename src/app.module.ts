@@ -13,15 +13,22 @@ import { RestaurantsModule } from './restaurants/restaurants.module';
 import { OrderService } from './order/order.service';
 
 @Module({
-  imports: [AuthModule,
+  imports: [
+    AuthModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(),'src/schema.gql')
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
     UsersModule,
     RestaurantsModule,
   ],
   controllers: [AppController],
-  providers: [AppService,CatService, CatsResolver, PrismaService, OrderService],
+  providers: [
+    AppService,
+    CatService,
+    CatsResolver,
+    PrismaService,
+    OrderService,
+  ],
 })
 export class AppModule {}
