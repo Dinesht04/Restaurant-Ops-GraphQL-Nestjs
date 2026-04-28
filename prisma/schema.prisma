@@ -13,23 +13,25 @@ datasource db {
   provider = "sqlite"
 }
 
-model Cat {
-  id    Int    @id @default(autoincrement())
-  name  String
-  age   Int
-  breed String
+
+enum Country{
+  us
+  india
 }
+
 
 model User {
   id       Int     @id @default(autoincrement())
   name     String  @unique
   password String
   role     String
+  country Country
 }
 
 model Restaurant {
   id     Int     @id @default(autoincrement())
   name   String
+  country Country
   Menus  Menu[]
   orders Order[]
   carts  Cart[]
@@ -39,7 +41,7 @@ model Menu {
   id           Int         @id @default(autoincrement())
   items        Item[]
   restaurant   Restaurant? @relation(fields: [restaurantId], references: [id])
-  restaurantId Int?
+  restaurantId Int
 }
 
 model Item {
@@ -61,9 +63,10 @@ enum PaymentMethod{
 
 model Order {
   id            Int        @id @default(autoincrement())
-  Items         Item[]
+  items         Item[]
   restaurantId  Int
   cost          Int @default(0)
+  country Country
   restaurant    Restaurant @relation(fields: [restaurantId], references: [id])
   completed     Boolean    @default(false)
   paymentMethod PaymentMethod @default(CASH)
@@ -71,10 +74,14 @@ model Order {
 
 model Cart {
   id            Int        @id @default(autoincrement())
-  Items         Item[]
+  items         Item[]
+  bruh Boolean
   restaurantId  Int
   cost          Int
+  country Country
   restaurant    Restaurant @relation(fields: [restaurantId], references: [id])
   paymentMethod String
 }
+
+
 

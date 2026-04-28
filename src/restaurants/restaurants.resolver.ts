@@ -1,4 +1,11 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Context,
+  GqlExecutionContext,
+  Mutation,
+  Query,
+  Resolver,
+} from '@nestjs/graphql';
 import { RestaurantsService } from './restaurants.service';
 import { Restaurant } from './model/restaurant.model';
 import { OrderService } from 'src/order/order.service';
@@ -8,6 +15,18 @@ import { addToOrder } from 'src/order/dto/add-to-order.input';
 import { checkoutInput } from 'src/order/dto/checkout-order.input';
 import { cancelOrderInput } from 'src/order/dto/cancel-order.input';
 import { ModifyPaymentMethodInput } from 'src/order/dto/modify-payment.input';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
+import {
+  createParamDecorator,
+  UseGuards,
+  ExecutionContext,
+} from '@nestjs/common';
+import { Country } from 'generated/prisma/enums';
+import type  Request from 'express';
+import { ManagerGuard } from 'src/auth/guards/auth.manager.guard';
+import { AdminGuard } from 'src/auth/guards/auth.admin.guard';
+
+// export type Country = "india" | "us";
 
 @Resolver(() => Restaurant)
 export class RestaurantsResolver {
@@ -16,35 +35,55 @@ export class RestaurantsResolver {
     private readonly orderService: OrderService,
   ) {}
 
+  @UseGuards(AuthGuard)
   @Query(() => [Restaurant])
-  findAll() {
-    return this.restaurantService.getAllRestaurants;
+  findAll(@Context('req') req: Request) {
+    const country = req["user"].country as Country;
+    return this.restaurantService.getAllRestaurants(country);
   }
 
-  @Mutation(() => [Order])
-  createOrder(@Args('createOrderInput') data: createOrderInput) {
-    return this.orderService.CreateOrder(data);
+  @UseGuards(AuthGuard)
+  @Mutation(() => Order)
+  createOrder(
+    @Args('createOrderInput') data: createOrderInput,
+    @Context('req') req: Request) {
+    const country = req["user"].country as Country;
+    return this.orderService.CreateOrder(data, country);
   }
 
-  @Mutation(() => [Order])
-  addItemToOrder(@Args('addOrderInput') data: addToOrder) {
-    return this.orderService.addToOrder(data);
+  @UseGuards(AuthGuard)
+  @Mutation(() => Order)
+  addItemToOrder(
+    @Args('addOrderInput') data: addToOrder,
+    @Context('req') req: Request) {
+    const country = req["user"].country as Country;
+    return this.orderService.addToOrder(data, country);
   }
 
-  @Mutation(() => [Order])
-  checkoutOrder(@Args('checkoutOrderInput') data: checkoutInput) {
-    return this.orderService.checkout(data);
+  @UseGuards(ManagerGuard)
+  @Mutation(() => Order)
+  checkoutOrder(
+    @Args('checkoutOrderInput') data: checkoutInput,
+    @Context('req') req: Request) {
+    const country = req["user"].country as Country;
+    return this.orderService.checkout(data, country);
   }
 
-  @Mutation(() => [Order])
-  cancelOrder(@Args('cancelOrderInput') data: cancelOrderInput) {
-    return this.orderService.cancelOrder(data);
+  @UseGuards(ManagerGuard)
+  @Mutation(() => Order)
+  cancelOrder(
+    @Args('cancelOrderInput') data: cancelOrderInput,
+    @Context('req') req: Request) {
+    const country = req["user"].country as Country;
+    return this.orderService.cancelOrder(data, country);
   }
 
-  @Mutation(() => [Order])
+  @UseGuards(AdminGuard)
+  @Mutation(() => Order)
   modifyPaymentMethod(
     @Args('modifyPaymentMethod') data: ModifyPaymentMethodInput,
-  ) {
-    return this.orderService.ModifyPaymentMethod(data);
+   @Context('req') req: Request) {
+    const country = req["user"].country as Country;
+    return this.orderService.ModifyPaymentMethod(data, country);
   }
 }

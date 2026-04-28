@@ -10,5 +10,5 @@ export class Menu {
   restaurantId: string;
 
   @Field(() => [Item])
-  Items: Item[];
+  items: Item[];
 }

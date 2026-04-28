@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { addToOrder } from '../order/dto/add-to-order.input';
 import { createOrderInput } from '../order/dto/create-order.input';
+import { Country } from 'generated/prisma/enums';
 
 type Item = {
   id: number;
@@ -25,12 +26,17 @@ type restaurants = {
 export class RestaurantsService {
   constructor(private prismaService: PrismaService) {}
 
-  getAllRestaurants() {
+  getAllRestaurants(country: Country) {
     return this.prismaService.restaurant.findMany({
-      select: {
-        id: true,
-        name: true,
-        Menus: true,
+      include: {
+        Menus: {
+          include: {
+            items: true
+          }
+        }
+      },
+      where: {
+        country: country,
       },
     });
   }

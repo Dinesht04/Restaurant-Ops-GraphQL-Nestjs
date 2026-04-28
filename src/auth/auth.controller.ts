@@ -9,19 +9,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ManagerGuard } from './guards/auth.manager.guard';
 import { AuthGuard } from './guards/auth.guard';
+import { SignInReq, SignUpReq } from './DTO';
 
-type SignInReq = {
-  username: string;
-  password: string;
-};
-
-type SignUpReq = {
-  username: string;
-  password: string;
-  role: string;
-};
 
 @Controller('auth')
 export class AuthController {
@@ -29,7 +19,7 @@ export class AuthController {
 
   @Post('signup')
   async Signup(@Body() data: SignUpReq) {
-    return this.authService.signUp(data.username, data.password, data.role);
+    return this.authService.signUp(data);
   }
 
   @HttpCode(HttpStatus.OK)

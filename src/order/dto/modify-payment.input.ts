@@ -6,6 +6,6 @@ export class ModifyPaymentMethodInput {
   @Field()
   orderId: number;
 
-  @Field((type) => PaymentMethod)
+  @Field(() => PaymentMethod)
   paymentMethod: PaymentMethod;
 }

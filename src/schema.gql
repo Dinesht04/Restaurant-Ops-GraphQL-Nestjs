@@ -2,23 +2,70 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Cat {
+type Item {
   id: ID!
   name: String!
-  age: Float!
-  breed: String!
+  price: String!
+}
+
+type Menu {
+  id: ID!
+  restaurantId: String!
+  items: [Item!]!
+}
+
+type Restaurant {
+  id: ID!
+  name: String!
+  Menus: [Menu!]!
+}
+
+type Order {
+  id: ID!
+  items: [Item!]!
+  restaurantId: Float!
+  cost: Float!
+  completed: Boolean!
+  paymentMethod: PaymentMethod!
+}
+
+enum PaymentMethod {
+  CARD
+  CASH
+  UPI
 }
 
 type Query {
-  cats: [Cat!]!
+  findAll: [Restaurant!]!
 }
 
 type Mutation {
-  CreateCat(createCatInput: CreateCatInput!): Cat!
+  createOrder(createOrderInput: createOrderInput!): Order!
+  addItemToOrder(addOrderInput: addToOrder!): Order!
+  checkoutOrder(checkoutOrderInput: checkoutInput!): Order!
+  cancelOrder(cancelOrderInput: cancelOrderInput!): Order!
+  modifyPaymentMethod(modifyPaymentMethod: ModifyPaymentMethodInput!): Order!
 }
 
-input CreateCatInput {
-  name: String!
-  age: Float!
-  breed: String!
+input createOrderInput {
+  restaurantId: Float!
+  paymentMethod: PaymentMethod!
+}
+
+input addToOrder {
+  orderId: Float!
+  itemId: Float!
+}
+
+input checkoutInput {
+  orderId: Float!
+}
+
+input cancelOrderInput {
+  orderId: Float!
+}
+
+input ModifyPaymentMethodInput {
+  orderId: Float!
+  paymentMethod: PaymentMethod!
 }

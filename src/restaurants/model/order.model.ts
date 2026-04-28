@@ -1,5 +1,6 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Item } from './item.model';
+import { isNullableType } from 'graphql';
 
 export enum PaymentMethod {
   CARD = 'CARD',
@@ -7,13 +8,17 @@ export enum PaymentMethod {
   UPI = 'UPI',
 }
 
+registerEnumType(PaymentMethod, {
+  name: 'PaymentMethod',
+});
+
 @ObjectType()
 export class Order {
   @Field(() => ID)
   id: number;
 
   @Field(() => [Item])
-  Items: Item[];
+  items: Item[];
 
   @Field()
   restaurantId: number;
@@ -24,6 +29,6 @@ export class Order {
   @Field()
   completed: boolean;
 
-  @Field((type) => PaymentMethod)
+  @Field(() => PaymentMethod)
   paymentMethod: PaymentMethod;
 }
